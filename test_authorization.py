@@ -10,11 +10,12 @@ from locators import (
     PostAdPageLocators
 )
 
-class BaseTest:
+class BaseTest():
    
     def open_main_page(self, driver):
         # Открыть главную страницу
-        driver.get("https://qa-desk.stand.praktikum-services.ru/")
+        url = "https://qa-desk.stand.praktikum-services.ru/"
+        driver.get(url)
         time.sleep(2)
     
     def wait_for_element(self, driver, locator, timeout=10):

@@ -9,44 +9,7 @@ from locators import (
     RegistrationPageLocators, 
     PostAdPageLocators
 )
-
-
-class BaseTest:
-   
-    def open_main_page(self, driver):
-        # Открыть главную страницу
-        driver.get("https://qa-desk.stand.praktikum-services.ru/")
-        time.sleep(2)
-    
-    def wait_for_element(self, driver, locator, timeout=10):
-        # Ожидание элемента
-        return WebDriverWait(driver, timeout).until(
-            EC.presence_of_element_located(locator)
-        )
-    
-    def wait_for_element_visible(self, driver, locator, timeout=10):
-        # Ожидание видимости элемента
-        return WebDriverWait(driver, timeout).until(
-            EC.visibility_of_element_located(locator)
-        )
-    
-    def element_exists(self, driver, locator, timeout=5):
-        # Проверка наличия элемента
-        try:
-            WebDriverWait(driver, timeout).until(
-                EC.presence_of_element_located(locator)
-            )
-            return True
-        except TimeoutException:
-            return False
-    
-    def is_element_displayed(self, driver, locator):
-        # Проверка отображения элемента
-        try:
-            return driver.find_element(*locator).is_displayed()
-        except NoSuchElementException:
-            return False
-
+from test_authorization import BaseTest
 
 class TestRegistration(BaseTest):
     # Тест регистрация пользователя
@@ -79,7 +42,7 @@ class TestRegistration(BaseTest):
         create_btn.click()
         
         # 6. Проверить: переход на главную страницу
-        time.sleep(2)
+        time.sleep(3)
         
         # Проверить наличие кнопки «Разместить объявление»
         post_ad_btn = self.wait_for_element(driver, PostAdPageLocators.POST_AD_BUTTON)
@@ -165,7 +128,7 @@ class TestRegistration(BaseTest):
         create_btn = self.wait_for_element(driver, RegistrationPageLocators.CREATE_ACCOUNT_BUTTON)
         create_btn.click()
         
-        time.sleep(2)
+        time.sleep(3)
         
         # 6. Проверить: поля Email, «Пароль», «Повторите пароль» выделены красным
 

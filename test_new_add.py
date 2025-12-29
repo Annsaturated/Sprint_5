@@ -9,56 +9,16 @@ from locators import (
     RegistrationPageLocators,
     PostAdPageLocators
 )
-
-
-class BaseTest:
-   
-    def open_main_page(self, driver):
-        # Открыть главную страницу
-        driver.get("https://qa-desk.stand.praktikum-services.ru/")
-        time.sleep(2)
-    
-    def wait_for_element(self, driver, locator, timeout=10):
-        # Ожидание элемента
-        return WebDriverWait(driver, timeout).until(
-            EC.presence_of_element_located(locator)
-        )
-    
-    def wait_for_element_visible(self, driver, locator, timeout=10):
-        # Ожидание видимости элемента
-        return WebDriverWait(driver, timeout).until(
-            EC.visibility_of_element_located(locator)
-        )
-    
-    def element_exists(self, driver, locator, timeout=5):
-        # Проверка наличия элемента
-        try:
-            WebDriverWait(driver, timeout).until(
-                EC.presence_of_element_located(locator)
-            )
-            return True
-        except TimeoutException:
-            return False
-    
-    def is_element_displayed(self, driver, locator):
-        # Проверка отображения элемента
-        try:
-            return driver.find_element(*locator).is_displayed()
-        except NoSuchElementException:
-            return False
-        
-
+from test_authorization import BaseTest
 
 class TestAdvertisement(BaseTest):
     # тесты на создание объявления
 
-    
     def test_create_ad_unauthenticated(self, driver):
         #Создание объявления неавторизованным пользователем
 
         # 1. Открыть главную страницу
-        driver.get("https://qa-desk.stand.praktikum-services.ru/")
-        time.sleep(2)
+        self.open_main_page(driver)
 
         # 2. Нажать кнопку «Разместить объявление»
         post_ad_btn = self.wait_for_element(driver, PostAdPageLocators.POST_AD_BUTTON)
@@ -98,14 +58,14 @@ class TestAdvertisement(BaseTest):
         # Ждем перезагрузки и появления элемента заново
         time.sleep(3)
 
-        # 2. Нажать кнопку «Разместить объявление»
+        # 5. Нажать кнопку «Разместить объявление»
         post_ad_btn = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable(PostAdPageLocators.POST_AD_BUTTON)
     )
         post_ad_btn.click()
-        time.sleep(2)
+        time.sleep(3)
     
-        # 3. Заполнить все поля формы
+        # 6. Заполнить все поля формы
         ad_name = f"Новое объявление {int(time.time())}"
         
         name_field = self.wait_for_element(driver, PostAdPageLocators.NAME_FIELD)
@@ -117,7 +77,7 @@ class TestAdvertisement(BaseTest):
         price_field = self.wait_for_element(driver, PostAdPageLocators.PRICE_FIELD)
         price_field.send_keys("100500")
         
-        # 4. Выбрать город из Dropdown
+        # 7. Выбрать город из Dropdown
         city_dropdown = self.wait_for_element(driver, PostAdPageLocators.CITY_DROPDOWN)
         city_dropdown.click()
         time.sleep(1)
@@ -129,7 +89,7 @@ class TestAdvertisement(BaseTest):
         city_option.click()
         time.sleep(1)
         
-        # 5. Выбрать из Dropdown «Категорию»
+        # 8. Выбрать из Dropdown «Категорию»
         category_dropdown = self.wait_for_element(driver, PostAdPageLocators.CATEGORY_DROPDOWN)
         category_dropdown.click()
         time.sleep(1)
@@ -139,9 +99,9 @@ class TestAdvertisement(BaseTest):
         EC.element_to_be_clickable(PostAdPageLocators.CATEGORY_TECH_BUTTON)
     )
         category_option.click()
-        time.sleep(1)
+        time.sleep(2)
         
-        # 6. Выбрать RadioButton «Состояние товара»
+        # 9. Выбрать RadioButton «Состояние товара»
         try:
             new_condition = driver.find_element(*PostAdPageLocators.NEW_CONDITION_RADIO)
             new_condition.click()
@@ -149,18 +109,18 @@ class TestAdvertisement(BaseTest):
             used_condition = driver.find_element(*PostAdPageLocators.USED_CONDITION_RADIO)
             used_condition.click()
         
-        # 7. Нажать кнопку «Опубликовать»
+        # 10. Нажать кнопку «Опубликовать»
         publish_btn = self.wait_for_element(driver, PostAdPageLocators.PUBLISH_BUTTON)
         publish_btn.click()
         
-        time.sleep(2)
+        time.sleep(4)
         
-        # 8. Перейти в профиль пользователя
+        # 11. Перейти в профиль пользователя
         profile_btn = self.wait_for_element(driver, PostAdPageLocators.USER_PROFILE_BUTTON)
         profile_btn.click()
-        time.sleep(2)
+        time.sleep(4)
         
-        # 9. Проверить: в блоке «Мои объявления» отображается созданное объявление.
+        # 12. Проверить: в блоке «Мои объявления» отображается созданное объявление.
        
         my_ad_elements = driver.find_elements(*PostAdPageLocators.AD_TITLE_CSS)
     
